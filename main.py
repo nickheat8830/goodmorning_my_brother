@@ -33,9 +33,10 @@ def get_weather1():
   tianapi = conn.getresponse()
   result = tianapi.read()
   data = result.decode('utf-8')
-  weather = data['result']['weather']
-  lowest = data['result']['lowest']
-  highest = data['result']['highest']
+  dict_data = json.loads(data)
+  weather = dict_data['result']['weather']
+  lowest = dict_data['result']['lowest']
+  highest = dict_data['result']['highest']
   return weather, lowest, highest
 
 def get_count():
