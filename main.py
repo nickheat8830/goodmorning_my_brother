@@ -24,6 +24,19 @@ def get_weather():
   weather = res['data']['list'][0]
   return weather['weather'], math.floor(weather['temp'])
 
+def get_weather1():
+  conn = http.client.HTTPSConnection('apis.tianapi.com')  #接口域名
+  params = urllib.parse.urlencode({'key':'3526e085d83b2685f2610ab7ab02c324','city':'101250101','type':'1'})
+  headers = {'Content-type':'application/x-www-form-urlencoded'}
+  conn.request('POST','/tianqi/index',params,headers)
+  tianapi = conn.getresponse()
+  result = tianapi.read()
+  data = result.decode('utf-8')
+  weather = data['result']['weather']
+  lowest = data['result']['lowest']
+  highest = data['result']['highest']
+  return weather, lowest, highest
+
 def get_count():
   delta = today - datetime.strptime(start_date, "%Y-%m-%d")
   return delta.days
@@ -47,7 +60,8 @@ def get_random_color():
 client = WeChatClient(app_id, app_secret)
 
 wm = WeChatMessage(client)
-wea, temperature = get_weather()
-data = {"weather":{"value":wea},"temperature":{"value":temperature},"love_days":{"value":get_count()},"birthday_left":{"value":get_birthday()},"words":{"value":get_words(), "color":get_random_color()}}
+# wea, temperature = get_weather()
+wea, low, high = get_weather1()
+data = {"weather":{"value":wea},"low":{"value":low},"high":{"value":high} ,"love_days":{"value":get_count()},"birthday_left":{"value":get_birthday()},"words":{"value":get_words(), "color":get_random_color()}}
 res = wm.send_template(user_id, template_id, data)
 print(res)
