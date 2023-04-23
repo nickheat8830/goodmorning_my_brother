@@ -71,7 +71,7 @@ URL = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=3c35e930-5284-4f0d-a
 mHeader = {'Content-Type': 'application/json; charset=UTF-8'}
 time = datetime.now()
 time_content = "现在是{month}月{day}日{hour}点{minute}分{second}秒\n".format(month=time.month,day=time.day,hour=time.hour,minute=time.minute,second=time.second)
-weather_content = "今天天气为{}\n温度最高{}，最低{}\n".format(wea,low,high)
+weather_content = "今天天气为{}\n温度最高{}，最低{}\n".format(wea,high,low)
 meet_content = "今天是我们在一起的第{}天\n".format(get_count())
 birthday_content = "距离你的生日还有{}天\n".format(get_birthday())
 words = get_words()
