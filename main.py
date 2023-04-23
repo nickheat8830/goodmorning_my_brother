@@ -66,4 +66,22 @@ wm = WeChatMessage(client)
 wea, low, high = get_weather1()
 data = {"weather":{"value":wea},"low":{"value":low},"high":{"value":high} ,"love_days":{"value":get_count()},"birthday_left":{"value":get_birthday()},"words":{"value":get_words(), "color":get_random_color()}}
 res = wm.send_template(user_id, template_id, data)
+###
+URL = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=3c35e930-5284-4f0d-a531-9c813b222e0b'
+mHeader = {'Content-Type': 'application/json; charset=UTF-8'}
+time = datetime.now()
+time_content = "现在是{month}月{day}日{hour}点{minute}分{second}秒\n".format(month=time.month,day=time.day,hour=time.hour,minute=time.minute,second=time.second)
+weather_content = "今天天气为{}\n温度最高{}，最低{}\n".format(wea,low,high)
+meet_content = "今天是我们在一起的第{}天\n".format(get_count())
+birthday_content = "距离你的生日还有{}天\n".format(get_birthday())
+words = get_words()
+content = "早上好呀婷婷宝贝！\n"+time_content+weather_content+meet_content+birthday_content+words
+mBody = {
+    "msgtype": "text",
+    "text": {
+        "content": content
+    }
+}
+requests.post(url=URL, json=mBody, headers=mHeader)
+###
 print(res)
