@@ -62,26 +62,42 @@ def get_words():
 def get_random_color():
   return "#%06x" % random.randint(0, 0xFFFFFF)
 
+def get_star():
+    conn = http.client.HTTPSConnection('apis.tianapi.com')  # 接口域名
+    params = urllib.parse.urlencode({'key': '3526e085d83b2685f2610ab7ab02c324', 'astro': 'libra'})
+    headers = {'Content-type': 'application/x-www-form-urlencoded'}
+    conn.request('POST', '/star/index', params, headers)
+    tianapi = conn.getresponse()
+    result = tianapi.read()
+    data = result.decode('utf-8')
+    dict_data = json.loads(data)
+    color = dict_data['result']['list'][5]['content']
+    number = dict_data['result']['list'][6]['content']
+    star_result = dict_data['result']['list'][7]['content']
+    return color, number, star_result
 
 client = WeChatClient(app_id, app_secret)
 
 wm = WeChatMessage(client)
 # wea, temperature = get_weather()
 wea, low, high, date_now, week, tips, area = get_weather1()
+color, number, star_result = get_star()
 data = {"weather":{"value":wea},"low":{"value":low},"high":{"value":high} ,"love_days":{"value":get_count()},"birthday_left":{"value":get_birthday()},"words":{"value":get_words(), "color":get_random_color()}}
 res = wm.send_template(user_id, template_id, data)
 ###
 URL = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=3c35e930-5284-4f0d-a531-9c813b222e0b'
 mHeader = {'Content-Type': 'application/json; charset=UTF-8'}
 time = datetime.now()
-time_content = "今天是{}，{}\n".format(date_now, week)
-weather_content = "{}今天天气为{}\n温度最高{}，最低{}\n给婷婷的天气小tips：{}\n".format(area,wea,high,low,tips)
-meet_content = "今天是我们在一起的第{}天\n".format(get_count())
-birthday_content = "距离你的生日还有{}天\n".format(get_birthday())
+time_content = "📅今天是{}，{}\n".format(date_now, week)
+weather_content = "{}今天天气为{}\n温度最高{}，最低{}\n🎈给婷婷的天气小tips：{}\n".format(area,wea,high,low,tips)
+meet_content = "💌今天是我们在一起的第{}天\n".format(get_count())
+birthday_content = "/:cake距离婷婷的生日还有{}天\n".format(get_birthday())
+star_content = "幸运颜色：{}\n幸运数字：{}\n今日概述：{}\n".format(color,number,star_result)
 words = get_words()
-weather_x = "********天气播报********\n"
+weather_x = "********天气播报☁********\n"
 important_x = "********重要时间/:heart********\n"
-content = "早上好呀婷婷宝贝！\n"+time_content+weather_x+weather_content+important_x+meet_content+birthday_content+"\n"+words
+star_x = "********星座运势♎********\n"
+content = "/:sun早上好呀婷婷宝贝！\n"+time_content+weather_x+weather_content+important_x+meet_content+birthday_content+star_x+star_content+"\n"+words+"/:rose"
 mBody = {
     "msgtype": "text",
     "text": {
