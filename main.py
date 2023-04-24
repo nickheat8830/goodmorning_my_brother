@@ -73,7 +73,7 @@ def get_star():
     dict_data = json.loads(data)
     color = dict_data['result']['list'][5]['content']
     number = dict_data['result']['list'][6]['content']
-    star_result = dict_data['result']['list'][7]['content']
+    star_result = dict_data['result']['list'][8]['content']
     return color, number, star_result
 
 client = WeChatClient(app_id, app_secret)
