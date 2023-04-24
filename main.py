@@ -67,14 +67,14 @@ client = WeChatClient(app_id, app_secret)
 
 wm = WeChatMessage(client)
 # wea, temperature = get_weather()
-wea, low, high, date, week, tips, province = get_weather1()
+wea, low, high, date_now, week, tips, province = get_weather1()
 data = {"weather":{"value":wea},"low":{"value":low},"high":{"value":high} ,"love_days":{"value":get_count()},"birthday_left":{"value":get_birthday()},"words":{"value":get_words(), "color":get_random_color()}}
 res = wm.send_template(user_id, template_id, data)
 ###
 URL = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=3c35e930-5284-4f0d-a531-9c813b222e0b'
 mHeader = {'Content-Type': 'application/json; charset=UTF-8'}
 time = datetime.now()
-time_content = "今天是{}，{}\n".format(date, week)
+time_content = "今天是{}，{}\n".format(date_now, week)
 weather_content = "{}今天天气为{}\n温度最高{}，最低{}\n {}".format(province,wea,low,high,tips)
 meet_content = "今天是我们在一起的第{}天\n".format(get_count())
 birthday_content = "距离你的生日还有{}天\n".format(get_birthday())
